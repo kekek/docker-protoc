@@ -1,10 +1,26 @@
 
-
+TAG=v4
 
 .PHONY: build 
 build:
-	docker build -t docker-protoc:v4 .
+	$(call build-images,$(TAG))
 
-.PHONY: test
-test:
-	docker run --rm -it docker-protoc:v4 --version	
+.PHONY: push
+push:
+	$(call push-images,$(TAG))
+
+### push images with tag
+### 1 : tag
+define push-images
+	@echo ">> push-images exec: "
+	@echo ">> docker push kekek/protoc:$(strip $(1)) ."
+	docker push kekek/protoc:$(strip $(1))
+endef
+
+### build images with tag
+### 1 : tag
+define build-images
+	@echo ">> build-images exec: "
+	@echo ">> docker build -t kekek/protoc:$(strip $(1)) ."
+	docker build -t kekek/protoc:$(strip $(1)) .
+endef
